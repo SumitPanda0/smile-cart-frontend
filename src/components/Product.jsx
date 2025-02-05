@@ -11,8 +11,8 @@ const Product = () => {
   const [isLoading, setIsLoading] = useState(true);
   const fetchProduct = async () => {
     try {
-      const response = await productsApi.show();
-      setProduct(response.data);
+      const product = await productsApi.show();
+      setProduct(product);
     } catch (error) {
       console.log("An error occurred:", error);
     } finally {
@@ -24,19 +24,12 @@ const Product = () => {
     fetchProduct();
   }, []);
 
-  const {
-    name,
-    description,
-    mrp,
-    offer_price: offerPrice,
-    image_urls: imageUrls,
-    image_url: imageUrl,
-  } = product;
-  console.log(product);
+  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
+  // console.log(product);
 
   const totalDiscounts = mrp - offerPrice;
   const discountPercentage = ((totalDiscounts / mrp) * 100).toFixed(1);
-  console.log(discountPercentage);
+  // console.log(discountPercentage);
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
