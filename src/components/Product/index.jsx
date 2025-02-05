@@ -28,6 +28,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
