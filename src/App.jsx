@@ -8,7 +8,6 @@ import routes from "routes";
 
 import "./App.css";
 import CartItemsContext from "./contexts/CartItemsContext";
-// eslint-disable-next-line import/extensions
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
