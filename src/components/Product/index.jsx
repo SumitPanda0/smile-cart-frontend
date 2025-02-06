@@ -32,7 +32,15 @@ const Product = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
+  const {
+    name,
+    description,
+    mrp,
+    offerPrice,
+    imageUrls,
+    imageUrl,
+    availableQuantity,
+  } = product;
   // console.log(product);
 
   const totalDiscounts = mrp - offerPrice;
@@ -66,7 +74,7 @@ const Product = () => {
           <Typography className="font-semibold text-green-600">
             {discountPercentage}% off
           </Typography>
-          <AddToCart />
+          <AddToCart {...{ availableQuantity, slug }} />
         </div>
       </div>
     </div>
