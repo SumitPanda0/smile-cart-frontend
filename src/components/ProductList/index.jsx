@@ -7,6 +7,7 @@ import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
 import { isEmpty } from "ramda";
 import { useTranslation } from "react-i18next";
+import withTitle from "utils/withTitle";
 
 import ProductListItem from "./ProductListItem";
 
@@ -69,4 +70,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default withTitle(ProductList);
