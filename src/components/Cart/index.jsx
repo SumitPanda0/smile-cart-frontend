@@ -14,7 +14,7 @@ import useCartItemsStore from "stores/useCartItemsStore";
 import PriceCard from "./PriceCard";
 
 const Cart = () => {
-  const { cartItems, setSelectedQuantity } = useCartItemsStore();
+  const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const totalMrp = cartTotalOf(products, MRP);

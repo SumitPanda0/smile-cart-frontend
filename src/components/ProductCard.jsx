@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Delete } from "@bigbinary/neeto-icons";
 import ProductQuantity from "components/commons/ProductQuantity";
 import { Alert, Typography } from "neetoui";
-import { prop } from "ramda";
 import useCartItemsStore from "stores/useCartItemsStore";
 
 const ProductCard = ({
@@ -14,7 +13,7 @@ const ProductCard = ({
   name,
   availableQuantity,
 }) => {
-  const removeCartItem = useCartItemsStore(prop("removeCartItem"));
+  const removeCartItem = useCartItemsStore.pickFrom();
   const [shouldShowDeleteAlert, setShouldShowDeleteAlert] = useState(false);
 
   return (
