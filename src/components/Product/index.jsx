@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-
-import productsApi from "apis/products";
 import { Header, PageLoader, PageNotFound } from "components/commons";
 import AddToCart from "components/commons/AddToCart";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import useSelectedQuantity from "hooks/useSelectedQuantity";
 import i18n from "i18next";
 import { Typography, Button } from "neetoui";
-import { append, isNotNil } from "ramda";
+import { isNotNil } from "ramda";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import routes from "routes";
@@ -17,38 +15,32 @@ import Carousel from "./Carousel";
 const Product = () => {
   const { slug } = useParams();
   const { t } = useTranslation();
+  const { data: product = {}, isLoading, isError } = useShowProduct(slug);
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
-  const [product, setProduct] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const fetchProduct = async () => {
-    try {
-      const product = await productsApi.show(slug);
-      setProduct(product);
-      // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      // console.log("An error occurred:", error);
-      console.log(t("error.genericError", { error }));
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchProduct();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // const [product, setProduct] = useState({});
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [isError, setIsError] = useState(false);
+  // const fetchProduct = async () => {
+  //   try {
+  //     const product = await productsApi.show(slug);
+  //     setProduct(product);
+  //     // eslint-disable-next-line no-unused-vars
+  //   } catch (error) {
+  //     // console.log("An error occurred:", error);
+  //     console.log(t("error.genericError", { error }));
+  //     setIsError(true);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const {
-    name,
-    description,
-    mrp,
-    offerPrice,
-    imageUrls,
-    imageUrl,
-    availableQuantity,
-  } = product;
+  // useEffect(() => {
+  //   fetchProduct();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
   // console.log(product);
 
   const totalDiscounts = mrp - offerPrice;
@@ -67,7 +59,7 @@ const Product = () => {
         <div className="w-2/5">
           <div className="flex justify-center gap-16">
             {isNotNil(imageUrls) ? (
-              <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              <Carousel />
             ) : (
               <img alt={name} className="w-48" src={imageUrl} />
             )}
@@ -83,7 +75,7 @@ const Product = () => {
             {t("discountRate", { discountPercentage })}
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ availableQuantity, slug }} />
+            <AddToCart {...{ slug }} />
             <Button
               className="bg-neutral-800 hover:bg-neutral-950"
               label={t("buyNow")}

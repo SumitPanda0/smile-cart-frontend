@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import productsApi from "apis/products";
 import { Header, PageLoader } from "components/commons";
+import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
@@ -12,30 +12,32 @@ import withTitle from "utils/withTitle";
 import ProductListItem from "./ProductListItem";
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [products, setProducts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
   const debouncedSearchKey = useDebounce(searchKey);
   const { t } = useTranslation();
+  const { data: { products = [] } = {}, isLoading } = useFetchProducts({
+    searchTerm: debouncedSearchKey,
+  });
+  // const fetchProducts = async () => {
+  //   try {
+  //     const { products } = await productsApi.fetch({
+  //       searchTerm: debouncedSearchKey,
+  //     });
+  //     setProducts(products);
+  //     // console.log(response);
+  //   } catch (err) {
+  //     console.log(t("error.genericError", { err }));
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const fetchProducts = async () => {
-    try {
-      const { products } = await productsApi.fetch({
-        searchTerm: debouncedSearchKey,
-      });
-      setProducts(products);
-      // console.log(response);
-    } catch (err) {
-      console.log(t("error.genericError", { err }));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchKey]);
+  // useEffect(() => {
+  //   fetchProducts();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [debouncedSearchKey]);
 
   if (isLoading) {
     return <PageLoader />;
