@@ -1,9 +1,18 @@
 import axios from "axios";
+import { t } from "i18next";
 import { keysToCamelCase, serializeKeysToSnakeCase } from "neetocist";
+import { Toastr } from "neetoui";
 import { evolve } from "ramda";
 
 const transformResponseKeysToCamelCase = response => {
   if (response.data) response.data = keysToCamelCase(response.data);
+};
+
+const shouldShowToastr = response =>
+  typeof response === "object" && response?.noticeCode;
+
+const showSuccessToastr = response => {
+  if (shouldShowToastr(response.data)) Toastr.success(response.data);
 };
 
 const setHttpHeaders = () => {
@@ -11,6 +20,14 @@ const setHttpHeaders = () => {
     Accept: "application/json",
     "Content-Type": "application/json",
   };
+};
+
+const showErrorToastr = error => {
+  if (error.message === t("error.networkError")) {
+    Toastr.error(t("error.noInternetConnection"));
+  } else if (error.response?.status !== 404) {
+    Toastr.error(error);
+  }
 };
 
 const requestInterceptors = () => {
@@ -26,13 +43,20 @@ const requestInterceptors = () => {
 };
 
 const responseInterceptors = () => {
-  axios.interceptors.response.use(response => {
-    transformResponseKeysToCamelCase(response);
+  axios.interceptors.response.use(
+    response => {
+      transformResponseKeysToCamelCase(response);
+      showSuccessToastr(response);
 
-    return response.data;
-  });
+      return response.data;
+    },
+    error => {
+      showErrorToastr(error);
+
+      return Promise.reject(error);
+    }
+  );
 };
-
 export default function initializeAxios() {
   axios.defaults.baseURL =
     "https://smile-cart-backend-staging.neetodeployapp.com/";
