@@ -17,10 +17,10 @@ import PriceCard from "./PriceCard";
 
 const Cart = () => {
   const slugs = useCartItemsStore(store => keys(store.cartItems));
+  const { data: products = [], isLoading } = useFetchCartProducts(slugs);
   const { t } = useTranslation();
   const totalMrp = cartTotalOf(products, MRP);
   const totalOfferPrice = cartTotalOf(products, OFFER_PRICE);
-  const { data: products = [], isLoading } = useFetchCartProducts(slugs);
 
   if (isLoading) return <PageLoader />;
 
