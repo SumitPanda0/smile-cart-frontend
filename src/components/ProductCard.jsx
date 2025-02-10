@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 
 import { Delete } from "@bigbinary/neeto-icons";
 import ProductQuantity from "components/commons/ProductQuantity";
@@ -52,4 +52,4 @@ const ProductCard = ({ slug, imageUrl, offerPrice, mrp, name }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);
